@@ -9,7 +9,7 @@ This project make chrome notify to connect with Backlog and notify using chrome 
 
 Please install [crx](./backlog-notification.crx) file and drag, drop to your Chrome.
 
-Click [here](./backlog-notification.crx)
+Click [here](https://github.com/1984weed/backlog-notification/raw/master/backlog-notification.crx)
 
 # How to use 
 
