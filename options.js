@@ -19,7 +19,10 @@ window.addEventListener('load', function() {
         localStorage.frequency = e.target.value || 60;
         notify();
     })
-    frequency.value = localStorage.frequency = 60
+    if(localStorage.frequency){
+        localStorage.frequency = 60;
+    }
+    frequency.value = localStorage.frequency
 
     function notify(){
         chrome.runtime.sendMessage({update: true});

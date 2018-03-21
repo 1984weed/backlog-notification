@@ -43,34 +43,42 @@ const request = (space, apiKey, frequency) => {
             }
             localStorage.lastId = lastId
         }
-        if(frequency){
-            setId = setTimeout(
-                function(){
-                    doRequest()
-                }
-                , localStorage.frequency * 1000);
-        }
     }).catch((e) => {
         console.error(e)
     });
 }
 
-if (window.Notification) {
-    doRequest()
-}
-
 function doRequest(){
-    if(localStorage.frequency && localStorage.apiKey && localStorage.spaceName){
+    if(localStorage.apiKey && localStorage.spaceName){
         request(localStorage.spaceName, localStorage.apiKey, localStorage.frequency)
     }
 }
 
+const alarmName = "polling"
+
+const createAlarm = ()  => {
+    const frequency = parseInt(localStorage.frequency) || 15 
+    chrome.alarms.create(alarmName, 
+        {delayInMinutes: 0.1, periodInMinutes: frequency / 60}
+    )
+}
+
+
+const cancelAlarm = () =>  
+    chrome.alarms.clear(alarmName);
+
+// const checkAlarm = () => chrome.alarms.get(alarmName, () => doRequest())
+
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
+    (request, sender, sendResponse) => {
         if (request.update === true){
-            clearTimeout(setId);
-            doRequest()
+            cancelAlarm()
+            createAlarm()
+            checkAlarm()
         }
     }
 );
+createAlarm()
+
+chrome.alarms.onAlarm.addListener(() => doRequest())
 

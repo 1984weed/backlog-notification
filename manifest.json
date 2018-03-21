@@ -5,7 +5,8 @@
   "Shows off desktop notifications, which are \"toast\" windows that pop up on the desktop.",
   "icons": {"16": "logo.png", "48": "logo.png", "128": "logo.png"},
   "permissions": [
-    "notifications"
+    "notifications",
+    "alarms"
   ],
   "options_page": "options.html",
   "background": { "scripts": ["background.js"], "persistent": false },
