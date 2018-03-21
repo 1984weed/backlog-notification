@@ -67,8 +67,6 @@ const createAlarm = ()  => {
 const cancelAlarm = () =>  
     chrome.alarms.clear(alarmName);
 
-// const checkAlarm = () => chrome.alarms.get(alarmName, () => doRequest())
-
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         if (request.update === true){
