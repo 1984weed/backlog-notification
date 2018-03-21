@@ -72,7 +72,6 @@ chrome.runtime.onMessage.addListener(
         if (request.update === true){
             cancelAlarm()
             createAlarm()
-            checkAlarm()
         }
     }
 );
