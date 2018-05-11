@@ -1,0 +1,40 @@
+html{
+    width: 500px;
+    height: 300px;
+}
+body {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.content-header {
+    h1 {
+        background: #43D1AF;
+        padding: 20px 0;
+        text-align: center;
+        color: #fff;
+    }
+}
+
+.control-group {
+    font-size: 16px;
+    width: 100%;
+    background: #f7f7f7;
+    display: flex;
+    flex-direction: column;
+
+    input, select {
+        outline: none;
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 3px;
+        color: #555;
+    }
+
+    &__sound {
+        width: 100%;
+        display: flex;
+    }
+}
+

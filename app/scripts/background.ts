@@ -1,16 +1,7 @@
-function message(data){
-    switch(data.reason){
-        case 6:
-            return `${data.sender.name} has added you to ${data.project.name}`
-        case 4:
-            return `${data.sender.name} has updated an issue. ${data.issue.issueKey} ${data.comment.content}`
-        case 3:
-            return `${data.sender.name} has added an issue. ${data.issue.issueKey} ${data.issue.summary}`
-        default:
-            return `you should add logic to ${data.reason}.`
-    }
-}
-function show(message, id, space){
+import {getLabel, NotificationData, BacklogNotification} from './message'
+import { getStorage, BNStorage, canRequest } from './storage';
+
+function show(message: string, id: number, space: string, isSound: boolean){
     let notification = new Notification("You got a new notification in Backlog", {
         body: `${message}`
     })
@@ -18,12 +9,14 @@ function show(message, id, space){
     notification.onclick = function () {
         window.open(`https://${space}/globalbar/notifications/redirect/${id}`);
     };
-    let notifySound = new Audio("./sounds/bell.mp3");
-    notifySound.play();
+    if(isSound) {
+      let notifySound = new Audio("./sounds/bell.mp3");
+      notifySound.play();
+    }
 }
 
 let setId;
-const request = (space, apiKey, frequency) => {
+const request = (space: string, apiKey: string, isSound: boolean) => {
     fetch(`https://${space}/api/v2/notifications?apiKey=${apiKey}`).then(
         (response) => {
             if(response.status === 200){
@@ -32,14 +25,14 @@ const request = (space, apiKey, frequency) => {
                 throw new Error("Setting error")
             }
         }
-    ).then(data => {
+    ).then((data: BacklogNotification[]) => {
         let unreadItems = data.filter(item => {
             return item.id > (localStorage.lastId || 0)
         })
         let lastId = data ? data[0].id || 0 : 0
         if(unreadItems.length > 0){
             if(localStorage.lastId){
-                unreadItems.forEach(a => show(message(a), a.id, space))
+                unreadItems.forEach(a => show(getLabel(a, "en"), a.id, space, isSound))
             }
             localStorage.lastId = lastId
         }
@@ -48,16 +41,16 @@ const request = (space, apiKey, frequency) => {
     });
 }
 
-function doRequest(){
-    if(localStorage.apiKey && localStorage.spaceName){
-        request(localStorage.spaceName, localStorage.apiKey, localStorage.frequency)
+function doRequest(storage: BNStorage){
+    if(canRequest(storage)){
+        request(storage.spaceName, storage.apiKey, storage.isSound);
     }
 }
 
 const alarmName = "polling"
 
 const createAlarm = ()  => {
-    const frequency = parseInt(localStorage.frequency) || 15 
+    const frequency = getStorage().frequency;
     chrome.alarms.create(alarmName, 
         {delayInMinutes: 0.1, periodInMinutes: frequency / 60}
     )
@@ -77,5 +70,6 @@ chrome.runtime.onMessage.addListener(
 );
 createAlarm()
 
-chrome.alarms.onAlarm.addListener(() => doRequest())
+chrome.alarms.onAlarm.addListener(() => doRequest(getStorage()))
+
 

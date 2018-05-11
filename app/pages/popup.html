@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Popup</title>
+  <link rel="stylesheet" type="text/css" href="../styles/popup.css">
+</head>
+<body>
+  <div class="content-header">
+    <h1>Setting</h1>
+  </div>
+  <div class="control-group">
+    <label for="spaceName" class="control-label">Space domain</label>
+    <input type="text" name="apiKey" id="spaceName" placeholder="Space name">
+
+    <label for="apiKey">ApiKey</label>
+    <input type="text" name="apiKey" id="apiKey" placeholder="Api key">
+
+    <label for="equency">Polling time</label>
+    <select name="frequency" id="frequency">
+        <option>30</option>
+        <option selected>60</option>
+    </select>
+
+    <div class="control-group__sound">
+      <label for="sound" class="control-label">On Sound</label>
+      <input type="checkbox" name="soundCheck" id="sound">
+    </div>
+  </div>
+  <script src="../scripts/popup.js"></script>
+</body>
+</html>
